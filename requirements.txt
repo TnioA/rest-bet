@@ -1,4 +1,5 @@
 beautifulsoup4==4.5.3
 Flask==0.12
+Werkzeug==0.16
 requests
 flask-cors
