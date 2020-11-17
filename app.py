@@ -60,7 +60,7 @@ def BestNumber():
         reverse = True
     )
 
-    for i in range(0, 5):
+    for i in range(0, 6):
         final_list.append(i)
     
     return jsonify({'results': final_list})
