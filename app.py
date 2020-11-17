@@ -61,7 +61,7 @@ def BestNumber():
     )
 
     for i in range(0, 5):
-        final_list.append(sorted_list[i][0])
+        final_list.append(i)
     
     return jsonify({'results': final_list})
 
