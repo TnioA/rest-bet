@@ -12,7 +12,7 @@ CORS(app)
 
 @app.route('/api/numbers', methods=['GET'])
 def umbers():
-    html_doc = requests.get("https://www.resultadosmegasena.com.br/resultados-anteriores")
+    html_doc = requests.get("http://www.resultadosmegasena.com.br/resultados-anteriores")
     soup = BeautifulSoup(html_doc.text, "html.parser")
     data = []
     for dataBox in soup.find_all("tr", class_="rstable_td"):
@@ -38,7 +38,7 @@ def umbers():
 
 @app.route('/api/bestnumber', methods=['GET'])
 def BestNumber():
-    html_doc = requests.get("https://www.resultadosmegasena.com.br/resultados-anteriores")
+    html_doc = requests.get("http://www.resultadosmegasena.com.br/resultados-anteriores")
     soup = BeautifulSoup(html_doc.text, "html.parser")
     data = []
     number_list = []
