@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route('/api/numbers', methods=['GET'])
-def umbers():
+def Numbers():
     html_doc = requests.get("http://www.resultadosmegasena.com.br/resultados-anteriores")
     soup = BeautifulSoup(html_doc.text, "html.parser")
     data = []
