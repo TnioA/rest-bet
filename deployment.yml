@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: restbet
+spec:
+  selector:
+    matchLabels:
+      app: restbet
+  template:
+    metadata:
+      labels:
+        app: restbet
+    spec:
+      containers:
+        - name: restbet
+          image: tnioa/restbet:01
+          ports:
+            - containerPort: 5000

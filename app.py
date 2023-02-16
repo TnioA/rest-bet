@@ -21,7 +21,8 @@ def Numbers():
         info = itens[1].text.strip().split("\t\t\t\t\t\t")
         concurse = info[0].replace("\n", "").strip()
         winners = info[1].replace("Ganhadores:", "").strip()
-        value = info[2].replace("Prêmio:", "").strip()
+        #value = info[2].replace("Prêmio:", "").strip()
+        value = ''
         numbers = [item.text for item in itens[2].find_all("div")]
 
         data.append({ 
