@@ -1,5 +1,5 @@
 beautifulsoup4
-Flask
-Werkzeug
-requests
+flask
+flask-restx
 flask-cors
+requests
