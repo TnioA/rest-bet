@@ -9,6 +9,7 @@ import os
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
 CORS(app)
 
 api = Api(app, version='1.0', title='Rest Bet API', description='Serviço para retorno de dados da mega-sena.')
