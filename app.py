@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, jsonify
-from flask_restx import Resource, Api
+from flask import Flask
+from flask_restx import Resource, Api, fields
 from flask_cors import CORS
 from bs4 import BeautifulSoup
 import requests
-import json
 import os
 
 app = Flask(__name__)
@@ -12,14 +11,45 @@ app.config['JSON_AS_ASCII'] = False
 app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
 CORS(app)
 
-api = Api(app, version='1.0', title='Rest Bet API', description='Serviço para retorno de dados da mega-sena.')
+authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
+api = Api(
+    app, 
+    version='1.0', 
+    title='Rest Bet API', 
+    description='Serviço para retorno de dados da mega-sena.',
+    authorizations=authorizations
+)
+
+
+person_fields = api.model('NumbersResponseItem', {
+    'date': fields.DateTime(dt_format='rfc822', example= "7/06/2023"),
+    'concurse': fields.String(example="231"),
+    'winners': fields.String(example="1"),
+    'value': fields.String(example="1.123,00"),
+    'numbers': fields.List(fields.String(example="1"))
+})
+
+numbers = api.model('NumbersResponse', {
+    'results': fields.List(fields.Nested(person_fields))
+})
+
+best_number_response_model = api.model('BestNumberResponse', {
+    'results': fields.List(fields.String(example="1"))
+})
+
 bets = api.namespace('bets', ordered=True)
 
 @bets.route('/numbers')
-@bets.response(200, 'Returned the content list')
+@bets.response(200, 'Returned the content list', numbers)
 @bets.response(400, 'Validation errors')
 class Numbers(Resource):
+    # @api.expect(response_fields, validate=True)
+    # @api.marshal_with(response_fields, code=200)
+    # @api.marshal_list_with(person_fields, envelope='results')
     def get(self):
+        """
+        Retorna a lista de jogos da mega-sena
+        """
         html_doc = requests.get("http://www.resultadosmegasena.com.br/resultados-anteriores")
         soup = BeautifulSoup(html_doc.text, "html.parser")
         data = []
@@ -44,13 +74,15 @@ class Numbers(Resource):
         return {'results': data}
 
 @bets.route('/bestnumber')
-@bets.response(200, 'Returned the content list')
+@bets.response(200, 'Returned the content list', best_number_response_model)
 @bets.response(400, 'Validation errors')
 class BestNumber(Resource):
     def get(self):
+        """
+        Retorna os 6 melhores números para jogo
+        """
         html_doc = requests.get("http://www.resultadosmegasena.com.br/resultados-anteriores")
         soup = BeautifulSoup(html_doc.text, "html.parser")
-        data = []
         number_list = []
         object_list = {}
         final_list = []
