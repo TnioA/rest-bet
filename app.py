@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from http import HTTPStatus
 from flask import Flask
 from flask_restx import Resource, Api, fields
 from flask_cors import CORS
@@ -20,7 +21,6 @@ api = Api(
     authorizations=authorizations
 )
 
-
 person_fields = api.model('NumbersResponseItem', {
     'date': fields.DateTime(dt_format='rfc822', example= "7/06/2023"),
     'concurse': fields.String(example="231"),
@@ -40,8 +40,8 @@ best_number_response_model = api.model('BestNumberResponse', {
 bets = api.namespace('bets', ordered=True)
 
 @bets.route('/numbers')
-@bets.response(200, 'Returned the content list', numbers)
-@bets.response(400, 'Validation errors')
+@bets.response(int(HTTPStatus.OK), 'Returned the content list', numbers)
+@bets.response(int(HTTPStatus.BAD_REQUEST), 'Validation errors')
 class Numbers(Resource):
     # @api.expect(response_fields, validate=True)
     # @api.marshal_with(response_fields, code=200)
@@ -74,8 +74,8 @@ class Numbers(Resource):
         return {'results': data}
 
 @bets.route('/bestnumber')
-@bets.response(200, 'Returned the content list', best_number_response_model)
-@bets.response(400, 'Validation errors')
+@bets.response(int(HTTPStatus.OK), 'Returned the content list', best_number_response_model)
+@bets.response(int(HTTPStatus.BAD_REQUEST), 'Validation errors')
 class BestNumber(Resource):
     def get(self):
         """
