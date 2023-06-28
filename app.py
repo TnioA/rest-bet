@@ -26,7 +26,7 @@ person_fields = api.model('NumbersResponseItem', {
     'concurse': fields.String(example="231"),
     'winners': fields.String(example="1"),
     'value': fields.String(example="1.123,00"),
-    'numbers': fields.List(fields.String(example="1"))
+    'numbers': fields.List(fields.String(), example=["1", "2", "3", "4", "5", "6"])
 })
 
 numbers = api.model('NumbersResponse', {
@@ -34,7 +34,7 @@ numbers = api.model('NumbersResponse', {
 })
 
 best_number_response_model = api.model('BestNumberResponse', {
-    'results': fields.List(fields.String(example="1"))
+    'results': fields.List(fields.String(), example=["1", "2", "3", "4", "5", "6"])
 })
 
 bets = api.namespace('bets', ordered=True)
